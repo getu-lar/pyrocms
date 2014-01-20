@@ -1193,7 +1193,7 @@ class CI_Email {
 			$convert[] = ';';
 		}
 
-		$output = '';
+		$output = '=?' . $this->charset . '?Q?';
 		$temp = '';
 
 		for ($i = 0, $length = strlen($str); $i < $length; $i++)
@@ -1218,7 +1218,8 @@ class CI_Email {
 			// reset our temp variable, and keep on chuggin'
 			if ((strlen($temp) + strlen($char)) >= $limit)
 			{
-				$output .= $temp.$this->crlf;
+				$output .= $temp . '?=' . $this->crlf;
+				$output .= ' =?' . $this->charset . '?Q?';
 				$temp = '';
 			}
 
@@ -1228,7 +1229,7 @@ class CI_Email {
 
 		// wrap each line with the shebang, charset, and transfer encoding
 		// the preceding space on successive lines is required for header "folding"
-		return trim(preg_replace('/^(.*)$/m', ' =?'.$this->charset.'?Q?$1?=', $output.$temp));
+		return trim($output.$temp.'?=');
 	}
 
 	// --------------------------------------------------------------------
